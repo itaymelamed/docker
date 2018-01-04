@@ -3,7 +3,7 @@ version: "3.3"
 services:
 
   mongo:
-    image: mongo:3.3
+    image: mongo:303
     ports:
      - "27017:27017"
 
@@ -27,3 +27,7 @@ services:
     volumes:
     - /dev/shm:/dev/shm
   
+  logger:
+    image: automation/logger
+    ports:
+     - "4000:4000"
