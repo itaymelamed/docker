@@ -7,27 +7,31 @@ services:
     ports:
      - "27017:27017"
 
-  hub:
-    image: selenium/hub
-    ports:
-     - "4444:4444"
-    environment:
-     - GRID_TIMEOUT=300
-     - GRID_BROWSER_TIMEOUT=300
-
-  chrome:
-    image: selenium/node-chrome-debug
-    ports:
-     - "5900"
-    depends_on:
-     - hub
-    environment:
-     - HUB_PORT_4444_TCP_ADDR=hub
-     - HUB_PORT_4444_TCP_PORT=4444
-    volumes:
-    - /dev/shm:/dev/shm
-  
   logger:
     image: automation/logger
     ports:
      - "4000:4000"
+
+  selenoid:
+    network_mode: bridge
+    image: aerokube/selenoid:latest-release
+    volumes:
+      - "$PWD:/etc/selenoid"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "$PWD/videos:/opt/selenoid/video"
+    environment:
+      - OVERRIDE_VIDEO_OUTPUT_DIR=$PWD/videos
+    command: ["-conf", "/etc/selenoid/browsers.json", "-video-output-dir", "/opt/selenoid/video", "-limit", "2"]
+    ports:
+      - "4444:4444"
+  
+  selenoid-ui:
+    image: "aerokube/selenoid-ui"
+    depends_on:
+      - selenoid
+    network_mode: bridge
+    links:
+      - selenoid
+    ports:
+      - "8080:9090"
+    command: ["--selenoid-uri", "http://selenoid:4444"]
