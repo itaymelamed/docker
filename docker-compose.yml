@@ -1,5 +1,7 @@
 version: '3.3'
+
 services:
+
   selenoid:
     network_mode: bridge
     image: aerokube/selenoid:latest-release
@@ -15,7 +17,7 @@ services:
       - "4444:4444"
   
   selenoid-ui:
-    image: "aerokube/selenoid-ui"
+    image: aerokube/selenoid-ui
     depends_on:
       - selenoid
     network_mode: bridge
@@ -24,3 +26,14 @@ services:
     ports:
       - "9090:8080"
     command: ["--selenoid-uri", "http://selenoid:4444"]
+  
+  jenkins:
+    image : jenkins
+    ports:
+      - "8080:8080"
+    command: ["service jenkins start"]
+  
+  mongo:
+    image: mongo:3.3
+    ports:
+      - "27017:27017"
