@@ -37,3 +37,8 @@ services:
     image: mongo:3.3
     ports:
       - "27017:27017"
+  
+  logger:
+    image: automation/logger
+    ports:
+     - "4000:4000"
