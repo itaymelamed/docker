@@ -31,7 +31,6 @@ services:
     image : jenkins
     ports:
       - "8080:8080"
-    command: ["bin/bash && service jenkins start"]
   
   mongo:
     image: mongo:3.3
