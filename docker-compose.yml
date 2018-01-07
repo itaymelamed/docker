@@ -1,17 +1,5 @@
-version: "3.3"
-
+version: '3.3'
 services:
-
-  mongo:
-    image: mongo:3.3
-    ports:
-     - "27017:27017"
-
-  logger:
-    image: automation/logger
-    ports:
-     - "4000:4000"
-
   selenoid:
     network_mode: bridge
     image: aerokube/selenoid:latest-release
@@ -19,9 +7,10 @@ services:
       - "$PWD:/etc/selenoid"
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "$PWD/videos:/opt/selenoid/video"
+      - /dev/shm:/dev/shm
     environment:
       - OVERRIDE_VIDEO_OUTPUT_DIR=$PWD/videos
-    command: ["-conf", "/etc/selenoid/browsers.json", "-video-output-dir", "/opt/selenoid/video", "-limit", "2"]
+    command: ["-conf", "/etc/selenoid/browsers.json", "-video-output-dir", "/opt/selenoid/video", "-limit", "2", "-mem", "1g", "-cpu", "1.5"]
     ports:
       - "4444:4444"
   
@@ -33,5 +22,5 @@ services:
     links:
       - selenoid
     ports:
-      - "8080:9090"
+      - "9090:8080"
     command: ["--selenoid-uri", "http://selenoid:4444"]

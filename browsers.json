@@ -4,10 +4,11 @@
         "versions": {
             "63.0": {
                 "image": "selenoid/vnc:chrome_63.0",
+                "shmSize" : 1073741824,
                 "port": "4444",
                 "path": "/",
                 "tmpfs": {
-                    "/tmp": "size=128m"
+                    "/tmp": "size=512m"
                 }
             }
         }
