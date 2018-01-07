@@ -29,6 +29,7 @@ services:
   
   jenkins:
     image : jenkins
+    command: ["bash"]
     ports:
       - "8080:8080"
   
